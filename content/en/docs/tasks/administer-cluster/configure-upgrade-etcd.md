@@ -320,11 +320,21 @@ employed to recover the data of a failed cluster.
 Before starting the restore operation, a snapshot file must be present. It can
 either be a snapshot file from a previous backup operation, or from a remaining
 [data directory]( https://etcd.io/docs/current/op-guide/configuration/#--data-dir).
-Here is an example:
+Here is two example:
 
 ```shell
 ETCDCTL_API=3 etcdctl --endpoints 10.2.0.9:2379 snapshot restore snapshotdb
 ```
+Restore using a different data-dir:
+
+```shell
+ETCDCTL_API=3 etcdctl snapshot restore snapshotdb --data-dir=/var/lib/etcd_restore_v1
+```
+After that you need to modify the "/etc/kubernetes/manifests/etcd.yaml" and replace the values of data-dir:
+- --data-dir=/var/lib/etcd_restore_v1
+    - mountPath: /var/lib/etcd_restore_v1
+      path: /var/lib/etcd_restore_v1
+Once you save the file the new backup is restored.
 
 For more information and examples on restoring a cluster from a snapshot file, see
 [etcd disaster recovery documentation](https://etcd.io/docs/current/op-guide/recovery/#restoring-a-cluster).
